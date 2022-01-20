@@ -1,10 +1,21 @@
-const { Client, Intents } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
+require('dotenv').config();
+const fs = require('fs');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 const commandPrefix = '!';
 
-const token = ''
+const token = process.env.TOKEN
+
+client.commands = new Collection();
+
+const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js'));
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+
+    client.commands.set(command.name, command);
+}
 
 client.once('ready', () => {
     console.log('I am online!');
@@ -18,9 +29,9 @@ client.on('message', message => {
     const command = args.shift().toLowerCase();
 
     if (command === 'hello') {
-        message.channel.send('Hello I am Yoyo\'s Discord Bot!');
+        client.commands.get('hello').execute(message, args)
     } else if (command === 'github') {
-        message.channel.send("https://github.com/gcascade/yoyo-discord-bot");
+        client.commands.get('github').execute(message, args)
     }
 })
 
