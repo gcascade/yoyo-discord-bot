@@ -1,0 +1,23 @@
+{
+  "name": "yoyo-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gcascade/yoyo-discord-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gcascade/yoyo-discord-bot/issues"
+  },
+  "homepage": "https://github.com/gcascade/yoyo-discord-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0"
+  }
+}
