@@ -1,4 +1,5 @@
 const { Client, Collection, Intents } = require('discord.js');
+const Discord = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
 
@@ -29,9 +30,11 @@ client.on('message', message => {
     const command = args.shift().toLowerCase();
 
     if (command === 'hello') {
-        client.commands.get('hello').execute(message, args)
+        client.commands.get('hello').execute(message, args);
     } else if (command === 'github') {
-        client.commands.get('github').execute(message, args)
+        client.commands.get('github').execute(message, args, Discord);
+    } else if (command === 'help') {
+        client.commands.get('help').execute(message, args, Discord);
     }
 })
 
