@@ -35,6 +35,8 @@ client.on('message', message => {
         client.commands.get('github').execute(message, args, Discord);
     } else if (command === 'help') {
         client.commands.get('help').execute(message, args, Discord);
+    } else if (command === 'clear') {
+        client.commands.get('clear').execute(message, args);
     }
 })
 
