@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
 const commandPrefix = '!';
 
@@ -37,6 +37,10 @@ client.on('message', message => {
         client.commands.get('help').execute(message, args, Discord);
     } else if (command === 'clear') {
         client.commands.get('clear').execute(message, args);
+    } else if (command === 'play') {        
+        client.commands.get('play').execute(message, args);
+    } else if (command === 'leave') {        
+        client.commands.get('leave').execute(message, args);
     }
 })
 

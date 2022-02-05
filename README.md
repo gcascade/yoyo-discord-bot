@@ -2,11 +2,23 @@
 
 ## Requirements
 
-* Install [Node.js](https://nodejs.org/en/)
+* Install [Node.js](https://nodejs.org/en/) 
+
+  > discord.js v13 requires Node 16.6 or higher
 * Create a Discord bot [here](https://discord.com/developers/applications)
 * Add the bot to your server and set its permissions
 
   > Permissions may be required for some commands
+* On Windows, you may need to install [2015 Visual Studio Build Tools](https://www.microsoft.com/en-us/download/details.aspx?id=48159) to use sodium, the following command might also help:
+
+  `npm install --global --production --vs2015 --add-python-to-path windows-build-tools`
+
+  > Installing Visual Studio 2015 seems to be the easiest solution. C++ programming language and "Tools and Windows SDK" for Windows 8.1 and UCRT SDK need to be checked when installed Visual Studio.
+  >
+  > In Windows environment variables, add VCTargetsPath and set it to C:\Program Files (x86)\MSBuild\Microsoft.cpp\v4.0\v140
+  >
+  > Then run `npm config set msvs_version 2015`
+
 
 ## Install the project
 

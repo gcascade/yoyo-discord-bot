@@ -7,9 +7,12 @@ module.exports = {
             .setTitle('Help')
             .setDescription('Here\'s a description of the commands you can use')
             .addFields(
-                { name: 'Github', value: 'Send a link to the bot\'s Github page'}
+                { name: 'clear', value: 'Clear the chat messages' },
+                { name: 'github', value: 'Send a link to the bot\'s Github page' },
+                { name: 'play', value: 'Join the user\'s voice channel and play a video from Youtube' },
+                { name: 'leave', value: 'Leave current voice channel'},
             )
-            .setFooter('Commands can be invoked with !')
+            .setFooter({text: 'Commands can be invoked with !'});
         message.channel.send({embeds: [embed]});
     }
 }
