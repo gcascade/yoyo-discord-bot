@@ -1,9 +1,8 @@
 const { Client, Collection, Intents } = require('discord.js');
-const Discord = require('discord.js');
-require('dotenv').config();
 const fs = require('fs');
-const { m } = require('./emojiCharacters.js');
 const emojiCharacters = require('./emojiCharacters.js');
+
+require('dotenv').config();
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 
@@ -26,29 +25,22 @@ client.once('ready', () => {
 	console.log('I am online!');
 });
 
-client.on('message', message => {
-	if (!message.content.startsWith(commandPrefix) || message.author.bot) {return;}
+client.on('message', async message => {
+	if (!message.content.startsWith(commandPrefix) || message.author.bot) return;
 
 	const args = message.content.slice(commandPrefix.length).split(/ +/);
-	const command = args.shift().toLowerCase();
+	const commandName = args.shift().toLowerCase();
 
-	if (command === 'hello') {
-		client.commands.get('hello').execute(message, args);
+	const command = client.commands.get(commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(message, args);
 	}
-	else if (command === 'github') {
-		client.commands.get('github').execute(message, args, Discord);
-	}
-	else if (command === 'help') {
-		client.commands.get('help').execute(message, args, Discord);
-	}
-	else if (command === 'clear') {
-		client.commands.get('clear').execute(message, args);
-	}
-	else if (command === 'play') {
-		client.commands.get('play').execute(message, args);
-	}
-	else if (command === 'leave') {
-		client.commands.get('leave').execute(message, args);
+	catch (error) {
+		console.error(error);
+		await message.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
 

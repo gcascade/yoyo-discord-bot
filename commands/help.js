@@ -1,7 +1,9 @@
+const Discord = require('discord.js');
+
 module.exports = {
 	name: 'help',
 	description: 'Describe every command the bot knows',
-	execute(message, args, Discord) {
+	execute(message, args) {
 		const embed = new Discord.MessageEmbed()
 			.setColor('#5BFFDA')
 			.setTitle('Help')
