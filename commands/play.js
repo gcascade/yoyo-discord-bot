@@ -2,11 +2,33 @@ const ytdl = require('ytdl-core');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, StreamType, AudioPlayerStatus, NoSubscriberBehavior } = require('@discordjs/voice');
 const ytSearch = require('yt-search');
 
+function initPlayer(client, message, video, connection) {
+    if (!client.player[message.guild.id]) {
+        client.player[message.guild.id] = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });;
+
+        client.player[message.guild.id].on(AudioPlayerStatus.Playing, () => {
+            message.reply(`Now playing *** ${video.title} ***`)
+                .then((reply) => reply.react('⏯'))
+                .catch(console.error);
+        });
+        client.player[message.guild.id].on(AudioPlayerStatus.Paused, () => message.reply('The audio player is paused'));
+        client.player[message.guild.id].on(AudioPlayerStatus.Idle, () => {
+            client.off('messageReactionAdd', listener);
+            connection.destroy();
+        });
+    }
+}
+
 module.exports = {
     name: 'play',
     description: 'Join the user\'s voice channel and play a video from Youtube',
     async execute(message, args) {
-        const voiceChannel = message.member.voice.channel;
+        const voiceChannel = message.member.voice.channel;                    
+        const client = message.client;
 
         if (!voiceChannel) {
             return message.channel.send('You need to be in a channel to execute this command');
@@ -28,6 +50,8 @@ module.exports = {
             selfMute: false,
         });
 
+        client.connection[message.guild.id] = connection;
+
         const videoFinder = async (query) => {
             const videoResult = await ytSearch(query);
 
@@ -39,18 +63,11 @@ module.exports = {
         if (video) {
             const stream = ytdl(video.url, {filter: 'audioonly'});
             const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-            const player = createAudioPlayer({
-                behaviors: {
-                    noSubscriber: NoSubscriberBehavior.Pause,
-                },
-            });
 
-            player.play(resource);
-            connection.subscribe(player);
+            initPlayer(client, message, video, connection);
 
-            player.on(AudioPlayerStatus.Playing, () => message.reply(`Now playing *** ${video.title} ***`));
-            player.on(AudioPlayerStatus.Paused, () => message.reply('The audio player is paused'));
-            player.on(AudioPlayerStatus.Idle, () => connection.destroy());
+            client.player[message.guild.id].play(resource);
+            connection.subscribe(client.player[message.guild.id]);
         } else {
             message.reply('No results');
             connection.destroy();

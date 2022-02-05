@@ -3,13 +3,15 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 
 const commandPrefix = '!';
 
 const token = process.env.TOKEN
 
 client.commands = new Collection();
+client.player = [];
+client.connection = [];
 
 const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js'));
 for (const file of commandFiles) {
@@ -43,5 +45,44 @@ client.on('message', message => {
         client.commands.get('leave').execute(message, args);
     }
 })
+
+const pauseFilter = (reaction, user) => {
+    return ['⏯'].includes(reaction.emoji.name) 
+    && user.id === message.author.id 
+    && client.player[reaction.message.guild.id] 
+    && client.connection[reaction.message.guild.id];
+};
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot) {
+        return;
+    }
+    if (!reaction.message.guild) {
+        return;
+    }
+    if (!client.player[reaction.message.guild.id]) {
+        return;
+    }
+
+    if (pauseFilter) {
+        client.player[reaction.message.guild.id].pause();
+    }
+});
+
+client.on('messageReactionRemove', async (reaction, user) => {
+    if (user.bot) {
+        return;
+    }
+    if (!reaction.message.guild) {
+        return;
+    }
+    if (!client.player[reaction.message.guild.id]) {
+        return;
+    }
+
+    if (pauseFilter) {
+        client.player[reaction.message.guild.id].unpause();
+    }
+});
 
 client.login(token)
