@@ -12,7 +12,7 @@ function initPlayer(client, message, video, connection) {
 		});
 
 		client.player[message.guild.id].on(AudioPlayerStatus.Playing, () => {
-			message.reply(`Now playing *** ${video.title} ***`)
+			message.reply(`${emojiCharacters.musicNote} Now playing *** ${video.title} *** ${emojiCharacters.musicNote}`)
 				.then((reply) => reply.react(emojiCharacters.pauseUnpause))
 				.catch(console.error);
 		});
