@@ -1,12 +1,9 @@
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
-const emojiCharacters = require('./emojiCharacters.js');
 
 require('dotenv').config();
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
-
-const commandPrefix = '!';
 
 const token = process.env.TOKEN;
 
@@ -21,67 +18,16 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-client.once('ready', () => {
-	console.log('I am online!');
-});
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
-client.on('message', async message => {
-	if (!message.content.startsWith(commandPrefix) || message.author.bot) return;
-
-	const args = message.content.slice(commandPrefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
-
-	const command = client.commands.get(commandName);
-
-	if (!command) return;
-
-	try {
-		await command.execute(message, args);
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
 	}
-	catch (error) {
-		console.error(error);
-		await message.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	else {
+		client.on(event.name, (...args) => event.execute(...args));
 	}
-});
-
-const pauseFilter = (reaction, user) => {
-	return [emojiCharacters.pauseUnpause].includes(reaction.emoji.name)
-    && reaction.message.author.bot
-    && reaction.message.mentions.repliedUser.id === user.id
-    && client.player[reaction.message.guild.id]
-    && client.connection[reaction.message.guild.id];
-};
-
-client.on('messageReactionAdd', async (reaction, user) => {
-	if (user.bot) {
-		return;
-	}
-	if (!reaction.message.guild) {
-		return;
-	}
-	if (!client.player[reaction.message.guild.id]) {
-		return;
-	}
-
-	if (pauseFilter(reaction, user)) {
-		client.player[reaction.message.guild.id].pause();
-	}
-});
-
-client.on('messageReactionRemove', async (reaction, user) => {
-	if (user.bot) {
-		return;
-	}
-	if (!reaction.message.guild) {
-		return;
-	}
-	if (!client.player[reaction.message.guild.id]) {
-		return;
-	}
-
-	if (pauseFilter) {
-		client.player[reaction.message.guild.id].unpause();
-	}
-});
+}
 
 client.login(token);
