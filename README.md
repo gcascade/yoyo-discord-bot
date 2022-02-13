@@ -30,6 +30,7 @@
 |----|----|----|----|
 | TOKEN_ID | from [here](https://discord.com/developers/applications), go to Your Application > Bot > Token | __yes__ | OTM4MTI3NTUzNzc0OTExNTI4.YflxXg.5Z7UuQgWWiFQvYei-qqHjHx24pI|
 | ROLE_ID | A role used for certain commands, see [this](https://discordhelp.net/role-id) | __yes__ | 437254279452164096 |
+| DEFAULT_WIKI_LANG | Default language for wiki search engine | no | de, **en**, es, fr, it |
 
 ## Start the bot
 

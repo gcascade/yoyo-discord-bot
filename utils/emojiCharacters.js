@@ -10,4 +10,6 @@ module.exports = {
 	6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣',
 	10: '🔟', '#': '#️⃣', '*': '*️⃣',
 	'!': '❗', '?': '❓', pauseUnpause: '⏯', musicNote: '🎵',
+	slightySmilingFace: '🙂', slightlyFrowningFace: '🙁',
+
 };

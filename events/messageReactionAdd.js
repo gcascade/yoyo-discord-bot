@@ -1,4 +1,4 @@
-const emojiCharacters = require('../emojiCharacters.js');
+const emojiCharacters = require('../utils/emojiCharacters.js');
 
 const pauseFilter = (reaction, user) => {
 	return [emojiCharacters.pauseUnpause].includes(reaction.emoji.name)

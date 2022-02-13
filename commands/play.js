@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, StreamType, AudioPlayerStatus, NoSubscriberBehavior } = require('@discordjs/voice');
 const ytSearch = require('yt-search');
-const emojiCharacters = require('../emojiCharacters.js');
+const emojiCharacters = require('../utils/emojiCharacters.js');
 
 function initPlayer(client, message, video, connection) {
 	if (!client.player[message.guild.id]) {
