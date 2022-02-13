@@ -7,7 +7,7 @@
 exports.parseCommandArguments = function(args, options) {
 	const result = [];
 
-	if (!args || !args[0] || !options) {
+	if (!args || !args[0] || !options || !options[0]) {
 		return result;
 	}
 
@@ -34,6 +34,7 @@ exports.parseCommandArguments = function(args, options) {
 			optionArgument.args.push(arg);
 			result.push(optionArgument);
 			optionArgument = { args: [] };
+			newOption = false;
 		}
 		else {
 			argsWithoutOption.args.push(arg);
