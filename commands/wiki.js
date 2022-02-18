@@ -21,6 +21,11 @@ module.exports = {
 		aliases: ['-l', '-lang'],
 		description: 'Set the wiki lang',
 		additionalParameter: true,
+	}, {
+		name: 'url',
+		value: '-url',
+		description: 'Set the wiki url',
+		additionalParameter: true,
 	}],
 	async execute(message, args) {
 		if (!args[0]) {
@@ -58,20 +63,23 @@ module.exports = {
 			const sections = await result.sections();
 			const description = summary.length > 500 ? `${summary.substring(0, 500)}...` : summary;
 
+			const siteinfo = await wiki({ apiUrl: apiUrl }).api({ action: 'query', meta: 'siteinfo' });
+			const metadata = siteinfo.query.general;
+
 			const embed = new MessageEmbed()
 				.setColor(color.white)
 				.setTitle(result.title)
 				.setURL(result.fullurl)
-				.setAuthor({ name: 'Wikipedia', iconURL: 'https://en.wikipedia.org/static/images/project-logos/enwiki.png', url: wikiMainUrl })
+				.setAuthor({ name: metadata.sitename, iconURL: `https:${metadata.logo}`, url: metadata.base })
 				.setDescription(description)
-				.setThumbnail('https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OOjs_UI_icon_logo-wikipedia.svg/480px-OOjs_UI_icon_logo-wikipedia.svg.png')
+				.setThumbnail(`https:${metadata.logo}`)
 				.addFields(
 					{ name: 'Read more', value: result.fullurl },
 					{ name: '\u200B', value: '\u200B' },
 				)
 				.setImage(mainImage)
 				.setTimestamp(result.touched)
-				.setFooter({ text: 'Last edited', iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OOjs_UI_icon_logo-wikipedia.svg/480px-OOjs_UI_icon_logo-wikipedia.svg.png' });
+				.setFooter({ text: 'Last edited', iconURL: `https:${metadata.logo}` });
 
 			for (let i = 0; i < sections.length && i < 3; i++) {
 				if (sections[i] && sections[i].title) {
@@ -91,6 +99,14 @@ function getWikiUrl(argOptions) {
 	const defaultLang = process.env.DEFAULT_WIKI_LANG ? process.env.DEFAULT_WIKI_LANG : 'en';
 
 	let lang;
+
+	if (includesOption(argOptions, 'url')) {
+		const arg = getOptionArg(argOptions, 'url').args[0];
+		if (!arg) {
+			throw 'Missing url with \'-url\'';
+		}
+		return arg;
+	}
 
 	if (includesOption(argOptions, 'language')) {
 		lang = getOptionArg(argOptions, 'language').args[0];
