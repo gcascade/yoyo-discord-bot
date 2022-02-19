@@ -11,14 +11,14 @@ module.exports = {
 	description: 'Search info from a wiki',
 	options: [{
 		name: 'random',
-		value: '-random',
-		aliases: ['-r', '-rand'],
+		value: '-r',
+		aliases: ['-random', '-rand'],
 		description: 'Search for a random wiki page',
 		additionalParameter: false,
 	}, {
 		name: 'language',
-		value: '-language',
-		aliases: ['-l', '-lang'],
+		value: '-l',
+		aliases: ['-language', '-lang'],
 		description: 'Set the wiki lang',
 		additionalParameter: true,
 	}, {
@@ -66,26 +66,7 @@ module.exports = {
 			const siteinfo = await wiki({ apiUrl: apiUrl }).api({ action: 'query', meta: 'siteinfo' });
 			const metadata = siteinfo.query.general;
 
-			const embed = new MessageEmbed()
-				.setColor(color.white)
-				.setTitle(result.title)
-				.setURL(result.fullurl)
-				.setAuthor({ name: metadata.sitename, iconURL: `https:${metadata.logo}`, url: metadata.base })
-				.setDescription(description)
-				.setThumbnail(`https:${metadata.logo}`)
-				.addFields(
-					{ name: 'Read more', value: result.fullurl },
-					{ name: '\u200B', value: '\u200B' },
-				)
-				.setImage(mainImage)
-				.setTimestamp(result.touched)
-				.setFooter({ text: 'Last edited', iconURL: `https:${metadata.logo}` });
-
-			for (let i = 0; i < sections.length && i < 3; i++) {
-				if (sections[i] && sections[i].title) {
-					embed.addField(sections[i].title, `${result.fullurl}#${sections[i].title.replace(' ', '_')}`, true);
-				}
-			}
+			const embed = createEmbed(result, metadata, description, mainImage, sections);
 			message.channel.send({ embeds: [embed] });
 
 		}
@@ -94,6 +75,30 @@ module.exports = {
 		}
 	},
 };
+
+function createEmbed(wikiResult, metadata, description, mainImage, sections) {
+	const embed = new MessageEmbed()
+		.setColor(color.white)
+		.setTitle(wikiResult.title)
+		.setURL(wikiResult.fullurl)
+		.setAuthor({ name: metadata.sitename, iconURL: `https:${metadata.logo}`, url: metadata.base })
+		.setDescription(description)
+		.setThumbnail(`https:${metadata.logo}`)
+		.addFields(
+			{ name: 'Read more', value: wikiResult.fullurl },
+			{ name: '\u200B', value: '\u200B' },
+		)
+		.setImage(mainImage)
+		.setTimestamp(wikiResult.touched)
+		.setFooter({ text: 'Last edited', iconURL: `https:${metadata.logo}` });
+
+	for (let i = 0; i < sections.length && i < 3; i++) {
+		if (sections[i] && sections[i].title) {
+			embed.addField(sections[i].title, `${wikiResult.fullurl}#${sections[i].title.replace(' ', '_')}`, true);
+		}
+	}
+	return embed;
+}
 
 function getWikiUrl(argOptions) {
 	const defaultLang = process.env.DEFAULT_WIKI_LANG ? process.env.DEFAULT_WIKI_LANG : 'en';
