@@ -15,7 +15,6 @@ module.exports = {
 		const fields = [];
 		const argOptions = parseCommandArguments(args, this.options);
 		const commands = argOptions.filter(argOption => !argOption.option).flatMap(argOption => argOption.args);
-		console.log(commands);
 		message.client.commands.forEach(command => {
 			if (command.hidden) {
 				return;

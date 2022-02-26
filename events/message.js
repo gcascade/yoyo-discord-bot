@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const commandPrefix = '!';
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
 			await command.execute(message, args);
 		}
 		catch (error) {
-			console.error(error);
+			logger.error(error);
 			await message.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 	},

@@ -1,9 +1,14 @@
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
+const logger = require('./utils/logger');
 
 require('dotenv').config();
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
+
+client.on('debug', m => logger.debug(m));
+client.on('warn', m => logger.warn(m));
+client.on('error', m => logger.error(m));
 
 const token = process.env.TOKEN;
 
