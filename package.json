@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js",
+    "dev": "node index.js | pino-pretty -i pid,hostname -t yyyy-mm-dd HH:MM:ss",
     "lint": "eslint",
     "test": "jest"
   },
