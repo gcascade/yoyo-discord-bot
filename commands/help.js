@@ -11,6 +11,7 @@ module.exports = {
 		description: 'Display additional information',
 		additionalParameter: false,
 	}],
+	cooldown: 5,
 	execute(message, args) {
 		const fields = [];
 		const argOptions = parseCommandArguments(args, this.options);

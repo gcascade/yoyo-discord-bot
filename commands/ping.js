@@ -4,4 +4,5 @@ module.exports = {
 	execute(message, args) {
 		message.reply(`Bot ping: ${message.client.ws.ping}ms.`);
 	},
+	cooldown: 5,
 };

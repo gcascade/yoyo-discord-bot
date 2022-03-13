@@ -25,6 +25,7 @@ function initPlayer(client, message, video, connection) {
 module.exports = {
 	name: 'play',
 	description: 'Join the user\'s voice channel and play a video from Youtube',
+	cooldown: 10,
 	async execute(message, args) {
 		const voiceChannel = message.member.voice.channel;
 		const client = message.client;

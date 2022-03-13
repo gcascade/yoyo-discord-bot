@@ -2,6 +2,7 @@ module.exports = {
 	name: 'clear',
 	description: 'Clear the chat messages',
 	hidden: true,
+	cooldown: 10,
 	async execute(message, args) {
 		require('dotenv').config();
 

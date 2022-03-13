@@ -3,6 +3,7 @@ const { getVoiceConnection } = require('@discordjs/voice');
 module.exports = {
 	name: 'leave',
 	description: 'Leave channel',
+	cooldown: 5,
 	async execute(message, args) {
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {

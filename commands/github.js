@@ -2,6 +2,7 @@ module.exports = {
 	name: 'github',
 	description: 'Link to the bot\'s source code',
 	hidden: true,
+	cooldown: 10,
 	execute(message, args) {
 		require('dotenv').config();
 

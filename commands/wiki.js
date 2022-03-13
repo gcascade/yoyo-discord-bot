@@ -27,6 +27,7 @@ module.exports = {
 		description: 'Set the wiki url',
 		additionalParameter: true,
 	}],
+	cooldown: 10,
 	async execute(message, args) {
 		if (!args[0]) {
 			message.reply('Invalid query');
