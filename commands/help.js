@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { parseCommandArguments, includesOption } = require('../utils/optionsUtil');
+const { parseCommandArguments, includesOption } = require('../utils/optionsUtils');
 
 module.exports = {
 	name: 'help',

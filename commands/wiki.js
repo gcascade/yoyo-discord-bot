@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const color = require('../utils/color.js');
 const emojiCharacters = require('../utils/emojiCharacters.js');
 const wikiUrl = require('../utils/wikiUrl.js');
-const { parseCommandArguments, includesOption, getOptionArg } = require('../utils/optionsUtil');
+const { parseCommandArguments, includesOption, getOptionArg } = require('../utils/optionsUtils');
 
 
 module.exports = {

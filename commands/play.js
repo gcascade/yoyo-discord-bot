@@ -2,8 +2,10 @@ const ytdl = require('ytdl-core');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, StreamType, AudioPlayerStatus, NoSubscriberBehavior } = require('@discordjs/voice');
 const ytSearch = require('yt-search');
 const emojiCharacters = require('../utils/emojiCharacters.js');
+const { getUriQueryArgs } = require('../utils/stringUtils');
 
-function initPlayer(client, message, video, connection) {
+
+function initPlayer(client, message, connection) {
 	if (!client.player[message.guild.id]) {
 		client.player[message.guild.id] = createAudioPlayer({
 			behaviors: {
@@ -12,13 +14,13 @@ function initPlayer(client, message, video, connection) {
 		});
 
 		client.player[message.guild.id].on(AudioPlayerStatus.Playing, () => {
-			message.reply(`${emojiCharacters.musicNote} Now playing *** ${video.title} *** ${emojiCharacters.musicNote}`)
+			client.player[message.guild.id].lastMessage.reply(`${emojiCharacters.musicNote} Now playing *** ${client.player[message.guild.id].currentVideo.title} *** ${emojiCharacters.musicNote}`)
 				.then((reply) => reply.react(emojiCharacters.pauseUnpause))
 				.catch(console.error);
 		});
 		client.player[message.guild.id].on(AudioPlayerStatus.Paused, () => message.reply('The audio player is paused'));
 		client.player[message.guild.id].on(AudioPlayerStatus.Idle, () => connection.destroy());
-		client.player[message.guild.id].on('error', error => console.error(`Error: ${error.message}`));
+		client.player[message.guild.id].on('error', error => console.error(`[Music Player] Error: ${error.message}`));
 	}
 }
 
@@ -53,9 +55,24 @@ module.exports = {
 		client.connection[message.guild.id] = connection;
 
 		const videoFinder = async (query) => {
-			const videoResult = await ytSearch(query);
+			if (/^https:\/\/.*youtube\.com.*/gui.test(query)) {
+				let ytQuery = query;
+				const uriArgs = getUriQueryArgs(query);
+				if (uriArgs && uriArgs['v']) {
+					ytQuery = {
+						videoId: uriArgs['v'],
+					};
+				}
 
-			return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
+				const video = await ytSearch(ytQuery);
+
+				return video;
+			}
+			else {
+				const videoResult = await ytSearch(query);
+
+				return (videoResult.videos.length > 1) ? videoResult.videos[0] : null;
+			}
 		};
 
 		const video = await videoFinder(args.join(' '));
@@ -64,8 +81,10 @@ module.exports = {
 			const stream = ytdl(video.url, { filter: 'audioonly' });
 			const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
 
-			initPlayer(client, message, video, connection);
+			initPlayer(client, message, connection);
 
+			client.player[message.guild.id].currentVideo = video;
+			client.player[message.guild.id].lastMessage = message;
 			client.player[message.guild.id].play(resource);
 			connection.subscribe(client.player[message.guild.id]);
 		}

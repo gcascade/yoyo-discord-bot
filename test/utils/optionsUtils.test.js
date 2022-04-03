@@ -1,4 +1,4 @@
-const { parseCommandArguments, includesOption, getOptionArg } = require('../../utils/optionsUtil');
+const { parseCommandArguments, includesOption, getOptionArg } = require('../../utils/optionsUtils');
 
 const options = [{
 	name: 'random',
