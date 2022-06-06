@@ -21,11 +21,13 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.8.0",
+    "common-tags": "^1.8.2",
     "discord.js": "^13.6.0",
     "dotenv": "^14.2.0",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^4.4.1",
     "libsodium-wrappers": "^0.7.9",
+    "mongoose": "^6.3.4",
     "pino": "^7.0.0-rc.9",
     "sodium": "^3.0.2",
     "wikijs": "^6.3.3",

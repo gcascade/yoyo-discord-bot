@@ -1,5 +1,6 @@
 const logger = require('../utils/logger');
 const Discord = require('discord.js');
+const { checkForInvalidArguments } = require('../utils/commands/common');
 
 const commandPrefix = '!';
 const cooldowns = new Map();
@@ -39,7 +40,11 @@ module.exports = {
 		}
 
 		try {
-			await command.execute(message, args);
+			const isCommandValid = await checkForInvalidArguments(command, message, args);
+
+			if (isCommandValid) {
+				await command.execute(message, args);
+			}
 		}
 		catch (error) {
 			logger.error(error);

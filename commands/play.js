@@ -2,6 +2,7 @@ const ytdl = require('ytdl-core');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, StreamType, AudioPlayerStatus, NoSubscriberBehavior } = require('@discordjs/voice');
 const ytSearch = require('yt-search');
 const emojiCharacters = require('../utils/emojiCharacters.js');
+const logger = require('../utils/logger');
 const { getUriQueryArgs } = require('../utils/stringUtils');
 
 
@@ -16,11 +17,11 @@ function initPlayer(client, message, connection) {
 		client.player[message.guild.id].on(AudioPlayerStatus.Playing, () => {
 			client.player[message.guild.id].lastMessage.reply(`${emojiCharacters.musicNote} Now playing *** ${client.player[message.guild.id].currentVideo.title} *** ${emojiCharacters.musicNote}`)
 				.then((reply) => reply.react(emojiCharacters.pauseUnpause))
-				.catch(console.error);
+				.catch((error) => logger.error(error));
 		});
 		client.player[message.guild.id].on(AudioPlayerStatus.Paused, () => message.reply('The audio player is paused'));
 		client.player[message.guild.id].on(AudioPlayerStatus.Idle, () => connection.destroy());
-		client.player[message.guild.id].on('error', error => console.error(`[Music Player] Error: ${error.message}`));
+		client.player[message.guild.id].on('error', error => logger.error(`[Music Player] Error: ${error.message}`));
 	}
 }
 

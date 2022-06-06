@@ -1,6 +1,7 @@
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const logger = require('./utils/logger');
+const mongoose = require('mongoose');
 
 require('dotenv').config();
 
@@ -34,5 +35,14 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+}).then(() => {
+	logger.info('Connected to the database');
+}).catch((err) => {
+	logger.error(err);
+});
 
 client.login(token);
