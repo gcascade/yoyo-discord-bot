@@ -20,7 +20,14 @@ function initPlayer(client, message, connection) {
 				.catch((error) => logger.error(error));
 		});
 		client.player[message.guild.id].on(AudioPlayerStatus.Paused, () => message.reply('The audio player is paused'));
-		client.player[message.guild.id].on(AudioPlayerStatus.Idle, () => connection.destroy());
+		client.player[message.guild.id].on(AudioPlayerStatus.Idle, () => {
+			try {
+				connection.destroy();
+			}
+			catch (error) {
+				logger.error(error);
+			}
+		});
 		client.player[message.guild.id].on('error', error => logger.error(`[Music Player] Error: ${error.message}`));
 	}
 }
