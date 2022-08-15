@@ -18,6 +18,11 @@
   > In Windows environment variables, add VCTargetsPath and set it to C:\Program Files (x86)\MSBuild\Microsoft.cpp\v4.0\v140
   >
   > Then run `npm config set msvs_version 2015`
+* Install pino
+
+  `npm install pino@next`
+  
+  `npm install -g pino-pretty`
 
 
 ## Install the project
