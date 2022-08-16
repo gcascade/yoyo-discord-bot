@@ -36,6 +36,8 @@
 | TOKEN_ID | from [here](https://discord.com/developers/applications), go to Your Application > Bot > Token | __yes__ | OTM4MTI3NTUzNzc0OTExNTI4.YflxXg.5Z7UuQgWWiFQvYei-qqHjHx24pI|
 | ROLE_ID | A role used for certain commands, see [this](https://discordhelp.net/role-id) | __yes__ | 437254279452164096 |
 | DEFAULT_WIKI_LANG | Default language for wiki search engine | no | de, **en**, es, fr, it |
+| MONGO_CONNECTION_STRING | Mongo DB connection string | no | mongodb://localhost:27017 |
+| OPENAI_API_KEY | [Open AI API Key](https://beta.openai.com/account/api-keys) | no |  |
 
 ## Start the bot
 

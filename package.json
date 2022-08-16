@@ -28,6 +28,7 @@
     "ffmpeg-static": "^4.4.1",
     "libsodium-wrappers": "^0.7.9",
     "mongoose": "^6.3.4",
+    "openai": "^3.0.0",
     "pino": "^7.0.0-rc.9",
     "sodium": "^3.0.2",
     "wikijs": "^6.3.3",
