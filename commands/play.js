@@ -46,7 +46,7 @@ module.exports = {
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
 		if (!permissions.has(['CONNECT', 'SPEAK'])) {
-			return message.channel.send('You don\'t have the correction permissions');
+			return message.channel.send('You don\'t have the correct permissions');
 		}
 		if (!args.length) {
 			return message.channel.send('Missing arguments');

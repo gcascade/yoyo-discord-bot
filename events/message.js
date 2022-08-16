@@ -1,6 +1,8 @@
 const logger = require('../utils/logger');
 const Discord = require('discord.js');
 const { checkForInvalidArguments } = require('../utils/commands/common');
+const { botWasMentioned } = require('../utils/messageUtils');
+const openai = require('../ai/openai');
 
 const commandPrefix = '!';
 const cooldowns = new Map();
@@ -8,7 +10,17 @@ const cooldowns = new Map();
 module.exports = {
 	name: 'message',
 	async execute(message) {
-		if (!message.content.startsWith(commandPrefix) || message.author.bot) return;
+		const client = this.client
+		if (message.author.bot || (!message.content.startsWith(commandPrefix) && !botWasMentioned(client, message))) return;
+
+		if (botWasMentioned(client, message)) {
+			// Replace the mention with the bot's name
+			const content = message.content.replace(`<@!${client.user.id}>`, client.user.username);
+			const answer = await openai.ask(content);
+			if (answer) {
+				return message.reply(answer);
+			}
+		}
 
 		const args = message.content.slice(commandPrefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
