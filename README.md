@@ -38,6 +38,7 @@
 | DEFAULT_WIKI_LANG | Default language for wiki search engine | no | de, **en**, es, fr, it |
 | MONGO_CONNECTION_STRING | Mongo DB connection string | no | mongodb://localhost:27017 |
 | OPENAI_API_KEY | [Open AI API Key](https://beta.openai.com/account/api-keys) | no |  |
+| AI | Which AI to use | no | OPENAI |
 
 ## Start the bot
 
