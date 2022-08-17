@@ -16,7 +16,7 @@ exports.parseCommandArguments = function(args, options) {
 	let newOption = false;
 	for (const arg of args) {
 		if (arg.startsWith('-')) {
-			const option = options.find(opt => opt.value === arg || opt.aliases.includes(arg));
+			const option = options.find(opt => opt.value === arg || (opt.aliases && opt.aliases.includes(arg)));
 
 			if (!option) {
 				throw `Unknown option: ${arg}`;
